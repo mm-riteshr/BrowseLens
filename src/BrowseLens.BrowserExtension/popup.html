@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>BrowseLens Companion</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      margin: 0;
+      padding: 12px;
+      width: 270px;
+      background: #fdfdfd;
+      color: #333;
+    }
+    h3 {
+      margin: 0 0 8px 0;
+      font-size: 15px;
+      color: #1a73e8;
+    }
+    .badge {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #fff;
+      background: #777;
+    }
+    .badge.Connected { background: #28a745; }
+    .badge.Disconnected { background: #6c757d; }
+    .badge.Error { background: #dc3545; }
+    .badge.Unconfigured { background: #fd7e14; }
+    .row {
+      margin-top: 8px;
+      font-size: 12px;
+    }
+    .link {
+      display: block;
+      margin-top: 12px;
+      font-size: 12px;
+      color: #1a73e8;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .link:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <h3>BrowseLens Companion</h3>
+  <div class="row">
+    Status: <span id="statusBadge" class="badge">Checking...</span>
+  </div>
+  <div class="row">
+    Browser: <strong id="browserName">-</strong>
+  </div>
+  <div class="row">
+    Events Sent: <strong id="eventCount">0</strong>
+  </div>
+  <div class="row">
+    Offline Queue: <strong id="queueCount">0</strong>
+  </div>
+  <a id="optionsLink" class="link">Configure Connection Token &raquo;</a>
+  <script src="popup.js"></script>
+</body>
+</html>

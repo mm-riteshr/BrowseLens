@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>BrowseLens Companion Settings</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      padding: 20px;
+      max-width: 480px;
+      margin: 0 auto;
+      color: #333;
+    }
+    h2 {
+      margin-top: 0;
+      color: #1a73e8;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: 600;
+      font-size: 13px;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 13px;
+    }
+    .hint {
+      font-size: 11px;
+      color: #666;
+      margin-top: 4px;
+    }
+    .btn-row {
+      margin-top: 20px;
+      display: flex;
+      gap: 10px;
+    }
+    button {
+      padding: 8px 16px;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .btn-primary { background: #1a73e8; color: #fff; }
+    .btn-secondary { background: #e0e0e0; color: #333; }
+    .status {
+      margin-top: 15px;
+      font-size: 13px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h2>BrowseLens Companion Settings</h2>
+  <p>Connect this browser extension to the local BrowseLens desktop companion.</p>
+
+  <label for="serverUrl">Desktop Server URL</label>
+  <input type="text" id="serverUrl" placeholder="http://127.0.0.1:58432">
+  <div class="hint">Strictly loopback (127.0.0.1). Defaults to port 58432.</div>
+
+  <label for="authToken">Companion Authentication Token</label>
+  <input type="text" id="authToken" placeholder="Paste authentication token from BrowseLens desktop app">
+  <div class="hint">This per-session/per-install secret authenticates requests to the local desktop companion.</div>
+
+  <div class="btn-row">
+    <button id="saveBtn" class="btn-primary">Save Settings</button>
+    <button id="testBtn" class="btn-secondary">Test Connection</button>
+  </div>
+
+  <div id="statusMessage" class="status"></div>
+
+  <script src="options.js"></script>
+</body>
+</html>
+

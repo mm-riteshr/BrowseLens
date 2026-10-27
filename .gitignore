@@ -1,0 +1,46 @@
+# .NET & Visual Studio build outputs
+**/bin/
+**/obj/
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Packaging & Release outputs
+dist/
+out/
+build/
+coverage/
+TestResults/
+*.trx
+
+# Node / Browser extension dependencies
+node_modules/
+
+# Local app data, runtime DBs, logs, secrets
+data/*
+!data/README.md
+logs/*
+!logs/README.md
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
+*.log
+*.bak
+.env
+.env.*
+secrets/
+local.settings.json
+
+# Temporary & spike test artifacts
+server_test.*
+
+# OS / Editor metadata
+.DS_Store
+Thumbs.db
+Desktop.ini
+.vscode/
+.idea/

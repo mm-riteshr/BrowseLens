@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <RootNamespace>BrowseLens.IntegrationTests</RootNamespace>
+    <AssemblyName>BrowseLens.IntegrationTests</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\BrowseLens.Core\BrowseLens.Core.csproj" />
+    <ProjectReference Include="..\..\src\BrowseLens.Infrastructure\BrowseLens.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>
+

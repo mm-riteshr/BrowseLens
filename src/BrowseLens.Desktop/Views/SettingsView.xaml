@@ -1,0 +1,175 @@
+<UserControl x:Class="BrowseLens.Desktop.Views.SettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="750" d:DesignWidth="900"
+             FontFamily="Segoe UI, sans-serif">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <StackPanel Margin="24">
+
+            <!-- Status Banner (when feedback is available) -->
+            <Border Background="#EFF6FF" BorderBrush="#3B82F6" BorderThickness="1" CornerRadius="6" Padding="14,10" Margin="0,0,0,16">
+                <TextBlock Text="{Binding StatusMessage, FallbackValue='Configure privacy, tracking exclusions, and retention policies below.'}" 
+                           FontSize="13" FontWeight="SemiBold" Foreground="#1E40AF" />
+            </Border>
+
+            <!-- 0. Browser Extension Connection -->
+            <Border Background="White" BorderBrush="#E2E8F0" BorderThickness="1" CornerRadius="10" Padding="18" Margin="0,0,0,16">
+                <StackPanel>
+                    <TextBlock Text="BROWSER EXTENSION PAIRING &amp; AUTHENTICATION" FontSize="11" FontWeight="Bold" Foreground="#64748B" />
+                    <TextBlock Text="To link your Chrome or Edge browser extension, copy this token and paste it into the extension settings."
+                               FontSize="12" Foreground="#64748B" Margin="0,4,0,12" />
+
+                    <Grid Margin="0,0,0,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="150" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="Loopback Endpoint:" FontWeight="SemiBold" FontSize="12" Foreground="#0F172A" VerticalAlignment="Center" />
+                        <TextBlock Grid.Column="1" Text="{Binding ServerEndpoint}" FontSize="12" Foreground="#2563EB" VerticalAlignment="Center" />
+                    </Grid>
+
+                    <Grid Margin="0,0,0,4">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="150" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="Authentication Token:" FontWeight="SemiBold" FontSize="12" Foreground="#0F172A" VerticalAlignment="Center" />
+                        <TextBox Grid.Column="1" Text="{Binding AuthToken, Mode=OneWay}" IsReadOnly="True" FontSize="12" Padding="8,5" Margin="0,0,10,0" Background="#F8FAFC" BorderBrush="#CBD5E1" />
+                        <Button Grid.Column="2" Command="{Binding CopyTokenCommand}" Content="📋 Copy Token"
+                                Background="#2563EB" Foreground="White" FontWeight="SemiBold" FontSize="12" Padding="14,6" BorderThickness="0" Cursor="Hand" />
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- 1. Tracking Toggle -->
+            <Border Background="White" BorderBrush="#E2E8F0" BorderThickness="1" CornerRadius="10" Padding="18" Margin="0,0,0,16">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0">
+                        <TextBlock Text="TRACKING CONTROLS" FontSize="11" FontWeight="Bold" Foreground="#64748B" />
+                        <TextBlock Text="{Binding PauseStatusText}" FontSize="16" FontWeight="SemiBold" Foreground="#0F172A" Margin="0,4,0,2" />
+                        <TextBlock Text="Pause tracking before engaging in sensitive browsing tasks. When paused, BrowseLens does not record tab switches, URLs, or page titles." FontSize="12" Foreground="#64748B" TextWrapping="Wrap" />
+                    </StackPanel>
+                    <Button Grid.Column="1" Command="{Binding TogglePauseCommand}" Content="Toggle Tracking"
+                            Background="#0F172A" Foreground="White" FontWeight="SemiBold" Padding="16,8" BorderThickness="0" Cursor="Hand" VerticalAlignment="Center" />
+                </Grid>
+            </Border>
+
+            <!-- 2. URL Redaction Policy -->
+            <Border Background="White" BorderBrush="#E2E8F0" BorderThickness="1" CornerRadius="10" Padding="18" Margin="0,0,0,16">
+                <StackPanel>
+                    <TextBlock Text="URL SANITIZATION" FontSize="11" FontWeight="Bold" Foreground="#64748B" />
+                    <CheckBox IsChecked="{Binding UrlRedactionEnabled}" Margin="0,8,0,4">
+                        <TextBlock Text="Redact URL Query Strings and Hash Fragments (Recommended)" FontWeight="SemiBold" FontSize="13" Foreground="#0F172A" />
+                    </CheckBox>
+                    <TextBlock Text="Strips all URL query parameters (e.g. ?token=..., ?search=...) and anchor fragments (#section) before storing history. Prevents tokens and sensitive identifiers from reaching disk."
+                               FontSize="12" Foreground="#64748B" TextWrapping="Wrap" Margin="24,0,0,0" />
+                </StackPanel>
+            </Border>
+
+            <!-- 3. Excluded Domains & Wildcards -->
+            <Border Background="White" BorderBrush="#E2E8F0" BorderThickness="1" CornerRadius="10" Padding="18" Margin="0,0,0,16">
+                <StackPanel>
+                    <TextBlock Text="DOMAIN EXCLUSION RULES" FontSize="11" FontWeight="Bold" Foreground="#64748B" />
+                    <TextBlock Text="Websites matching these patterns are discarded in-memory and will NEVER be persisted to the local database."
+                               FontSize="12" Foreground="#64748B" Margin="0,4,0,12" />
+
+                    <!-- Add Pattern Input Row -->
+                    <Grid Margin="0,0,0,12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBox Grid.Column="0" Text="{Binding NewPatternInput, UpdateSourceTrigger=PropertyChanged}" 
+                                 Padding="10,6" Margin="0,0,10,0" FontSize="13" BorderBrush="#CBD5E1" />
+                        <Button Grid.Column="1" Command="{Binding AddPatternCommand}" Content="Add Exclusion Pattern"
+                                Background="#2563EB" Foreground="White" FontWeight="SemiBold" Padding="16,6" BorderThickness="0" Cursor="Hand" />
+                    </Grid>
+                    <TextBlock Text="Supports wildcards (e.g., *.internal.corp, *.bank.com, mail.google.com)" FontSize="11" Foreground="#94A3B8" Margin="0,0,0,12" />
+
+                    <!-- Excluded Patterns List -->
+                    <ItemsControl ItemsSource="{Binding ExcludedPatterns}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Background="#F8FAFC" BorderBrush="#E2E8F0" BorderThickness="1" CornerRadius="6" Padding="10,6" Margin="0,4">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Column="0" Text="{Binding Pattern}" FontWeight="SemiBold" FontSize="13" Foreground="#0F172A" VerticalAlignment="Center" />
+                                        <TextBlock Grid.Column="1" Text="{Binding CreatedAtUtc, StringFormat='Added {0:yyyy-MM-dd}'}" FontSize="11" Foreground="#94A3B8" Margin="16,0" VerticalAlignment="Center" />
+                                        <Button Grid.Column="2" Content="Remove" Command="{Binding DataContext.RemovePatternCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                CommandParameter="{Binding}"
+                                                Background="#FEE2E2" Foreground="#DC2626" FontWeight="SemiBold" FontSize="11" Padding="8,3" BorderThickness="0" Cursor="Hand" />
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
+
+            <!-- 4. Retention & Deletion -->
+            <Border Background="White" BorderBrush="#E2E8F0" BorderThickness="1" CornerRadius="10" Padding="18" Margin="0,0,0,16">
+                <StackPanel>
+                    <TextBlock Text="HISTORY RETENTION &amp; DATA DELETION" FontSize="11" FontWeight="Bold" Foreground="#64748B" />
+                    
+                    <Grid Margin="0,10,0,16">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="100" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="Keep history for:" FontSize="13" VerticalAlignment="Center" Margin="0,0,10,0" />
+                        <TextBox Grid.Column="1" Text="{Binding RetentionDays, UpdateSourceTrigger=PropertyChanged}" Padding="8,4" FontSize="13" VerticalAlignment="Center" />
+                        <TextBlock Grid.Column="2" Text="days" FontSize="13" VerticalAlignment="Center" Margin="8,0,16,0" />
+                        <Button Grid.Column="4" Command="{Binding SaveRetentionCommand}" Content="Save Retention"
+                                Background="#475569" Foreground="White" FontWeight="SemiBold" Padding="14,6" BorderThickness="0" Cursor="Hand" />
+                    </Grid>
+
+                    <Separator Background="#F1F5F9" Margin="0,0,0,16" />
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="12" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="Purge expired browsing sessions or completely wipe local history." FontSize="12" Foreground="#64748B" VerticalAlignment="Center" />
+                        <Button Grid.Column="1" Command="{Binding RunRetentionCleanupCommand}" Content="Purge Expired Data Now"
+                                Background="#E2E8F0" Foreground="#1E293B" FontWeight="SemiBold" Padding="14,6" BorderThickness="0" Cursor="Hand" />
+                        <Button Grid.Column="3" Command="{Binding DeleteAllHistoryCommand}" Content="Delete ALL History"
+                                Background="#DC2626" Foreground="White" FontWeight="SemiBold" Padding="14,6" BorderThickness="0" Cursor="Hand" />
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- 5. Transparency & Storage Audit -->
+            <Border Background="#F8FAFC" BorderBrush="#E2E8F0" BorderThickness="1" CornerRadius="10" Padding="18">
+                <StackPanel>
+                    <TextBlock Text="LOCAL STORAGE &amp; PRIVACY GUARANTEE" FontSize="11" FontWeight="Bold" Foreground="#64748B" />
+                    <TextBlock Text="All browsing history and resource metrics are stored strictly on this device in the local SQLite database:" FontSize="12" Foreground="#334155" Margin="0,4,0,4" />
+                    <TextBox Text="{Binding DatabasePath, Mode=OneWay}" IsReadOnly="True" Background="#FFFFFF" Padding="8,4" FontSize="12" Foreground="#0F172A" BorderBrush="#CBD5E1" Margin="0,0,0,10" />
+                    
+                    <TextBlock Text="• Zero Cloud Uploads: BrowseLens contains zero remote telemetry, cloud sync, or external analytics endpoints." FontSize="12" Foreground="#64748B" Margin="0,2" />
+                    <TextBlock Text="• Incognito Filter: Browsing in private or incognito windows is automatically dropped by default and never stored." FontSize="12" Foreground="#64748B" Margin="0,2" />
+                    <TextBlock Text="• Content Protection: BrowseLens never injects scripts into webpages or captures DOM content, keystrokes, form data, or screenshots." FontSize="12" Foreground="#64748B" Margin="0,2" />
+                </StackPanel>
+            </Border>
+
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
+

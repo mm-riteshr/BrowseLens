@@ -1,0 +1,25 @@
+{
+  "manifest_version": 3,
+  "name": "BrowseLens Companion",
+  "version": "1.0.0",
+  "description": "Local browser observability companion for BrowseLens Windows application.",
+  "permissions": [
+    "tabs",
+    "storage"
+  ],
+  "host_permissions": [
+    "http://127.0.0.1/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "BrowseLens Companion"
+  },
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": false
+  }
+}
+

@@ -1,0 +1,170 @@
+<Window x:Class="BrowseLens.Desktop.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:BrowseLens.Desktop.ViewModels"
+        xmlns:views="clr-namespace:BrowseLens.Desktop.Views"
+        mc:Ignorable="d"
+        Title="BrowseLens — Browser Observability &amp; Usage Analytics" 
+        Height="780" Width="1150" MinHeight="620" MinWidth="960"
+        WindowStartupLocation="CenterScreen"
+        Background="#F8FAFC"
+        FontFamily="Segoe UI, sans-serif">
+
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type vm:DashboardViewModel}">
+            <views:DashboardView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:HistoryViewModel}">
+            <views:HistoryView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:TopDomainsViewModel}">
+            <views:TopDomainsView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:SettingsViewModel}">
+            <views:SettingsView />
+        </DataTemplate>
+
+        <Style x:Key="NavButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="#CBD5E1" />
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="HorizontalContentAlignment" Value="Left" />
+            <Setter Property="Padding" Value="16,10" />
+            <Setter Property="Margin" Value="0,2" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="6" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="Center" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#1E293B" />
+                    <Setter Property="Foreground" Value="White" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="250" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <!-- Sidebar Navigation -->
+        <Border Grid.Column="0" Background="#0F172A" Padding="16">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <!-- Brand -->
+                <StackPanel Grid.Row="0" Margin="8,12,8,20">
+                    <TextBlock Text="BrowseLens" FontSize="20" FontWeight="Bold" Foreground="White" />
+                    <TextBlock Text="See Your Browsing Clearly." FontSize="11" Foreground="#94A3B8" Margin="0,2,0,0" />
+                </StackPanel>
+
+                <Separator Grid.Row="1" Background="#334155" Margin="0,0,0,16" />
+
+                <!-- Navigation Links -->
+                <StackPanel Grid.Row="2">
+                    <Button Content="📊  Overview Dashboard" Command="{Binding NavigateDashboardCommand}" Style="{StaticResource NavButtonStyle}" />
+                    <Button Content="🕒  Browsing History" Command="{Binding NavigateHistoryCommand}" Style="{StaticResource NavButtonStyle}" />
+                    <Button Content="🌐  Top Websites" Command="{Binding NavigateTopDomainsCommand}" Style="{StaticResource NavButtonStyle}" />
+                    <Button Content="⚙️  Privacy &amp; Settings" Command="{Binding NavigateSettingsCommand}" Style="{StaticResource NavButtonStyle}" />
+                </StackPanel>
+
+                <!-- Extension Setup & Connection Pill at Bottom -->
+                <Border Grid.Row="3" Background="#1E293B" CornerRadius="8" Padding="12" Margin="0,16,0,0">
+                    <StackPanel>
+                        <TextBlock Text="EXTENSION CONNECTION" FontSize="10" FontWeight="Bold" Foreground="#94A3B8" Margin="0,0,0,6" />
+                        <Grid Margin="0,2">
+                            <TextBlock Text="Chrome:" FontSize="11" Foreground="#CBD5E1" />
+                            <TextBlock Text="{Binding Dashboard.ChromeStatus}" HorizontalAlignment="Right" FontSize="11" FontWeight="Bold">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Foreground" Value="#94A3B8" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Dashboard.ChromeStatus}" Value="Connected">
+                                                <Setter Property="Foreground" Value="#4ADE80" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding Dashboard.ChromeStatus}" Value="Paused">
+                                                <Setter Property="Foreground" Value="#FBBF24" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </Grid>
+                        <Grid Margin="0,2">
+                            <TextBlock Text="Edge:" FontSize="11" Foreground="#CBD5E1" />
+                            <TextBlock Text="{Binding Dashboard.EdgeStatus}" HorizontalAlignment="Right" FontSize="11" FontWeight="Bold">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Foreground" Value="#94A3B8" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Dashboard.EdgeStatus}" Value="Connected">
+                                                <Setter Property="Foreground" Value="#4ADE80" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding Dashboard.EdgeStatus}" Value="Paused">
+                                                <Setter Property="Foreground" Value="#FBBF24" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </Grid>
+                        <TextBlock Text="{Binding Dashboard.ServerPort, StringFormat='Port: {0} (127.0.0.1)'}" FontSize="10" Foreground="#64748B" Margin="0,4,0,4" />
+                        
+                        <Separator Background="#334155" Margin="0,4" />
+                        <TextBlock Text="AUTH TOKEN (Click to Copy):" FontSize="9" FontWeight="Bold" Foreground="#94A3B8" Margin="0,2,0,2" />
+                        <TextBox Text="{Binding Dashboard.AuthToken, Mode=OneWay}" IsReadOnly="True" FontSize="9"
+                                 Background="#0F172A" Foreground="#38BDF8" BorderBrush="#334155" Padding="4,3"
+                                 TextWrapping="NoWrap" ToolTip="Pairing token for Browser Extension" />
+                        <Button Content="📋 Copy Token" Command="{Binding Dashboard.CopyTokenCommand}"
+                                Background="#334155" Foreground="White" FontSize="10" FontWeight="SemiBold"
+                                Padding="6,4" Margin="0,5,0,0" BorderThickness="0" Cursor="Hand" />
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Border>
+
+        <!-- Main Content Area -->
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <!-- Top Header Bar -->
+            <Border Grid.Row="0" Background="White" BorderBrush="#E2E8F0" BorderThickness="0,0,0,1" Padding="24,14">
+                <Grid>
+                    <TextBlock Text="{Binding ActiveSectionTitle}" FontSize="18" FontWeight="Bold" Foreground="#0F172A" VerticalAlignment="Center" />
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                        <Border Background="#F1F5F9" CornerRadius="6" Padding="10,6" Margin="0,0,12,0">
+                            <TextBlock Text="100% Local-First Storage" FontSize="11" FontWeight="SemiBold" Foreground="#475569" />
+                        </Border>
+                        <Button Command="{Binding Dashboard.TogglePauseCommand}" Content="{Binding Dashboard.PauseButtonText}"
+                                Background="#0F172A" Foreground="White" FontWeight="SemiBold" FontSize="12" Padding="14,6" BorderThickness="0" Cursor="Hand" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- Dynamic Child View Content -->
+            <ContentControl Grid.Row="1" Content="{Binding CurrentViewModel}" />
+        </Grid>
+    </Grid>
+</Window>
+
